@@ -1,0 +1,16 @@
+package notaMedia;
+
+public class LanzadorProcesos {
+
+	public static void main(String[] args) {
+		
+		
+		
+	}
+	
+	public void lanzarContador() {
+		String claseContador = "notaMedia.ContadorNotas";
+		
+	}
+
+}

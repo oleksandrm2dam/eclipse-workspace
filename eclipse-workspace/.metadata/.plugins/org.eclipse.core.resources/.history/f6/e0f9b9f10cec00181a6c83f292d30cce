@@ -1,0 +1,37 @@
+package notaMedia;
+
+import java.io.File;
+
+public class LanzadorProcesos {
+
+	public static void main(String[] args) {
+		
+		
+		
+	}
+	
+	public void lanzarContador() {
+		String claseContador = "notaMedia.ContadorNotas";
+		ProcessBuilder pb;
+		
+		try {
+			pb = new ProcessBuilder(
+				"java",
+				clase,
+				ficheroLeer,
+				Character.toString(vocal)
+			);
+			
+			File dirVocales = new File("G:\\eclipse-workspace\\Servicios y procesos\\bin");
+			pb.directory(dirVocales);
+			pb.redirectError(new File("vocalesErrores.txt"));
+			pb.redirectOutput(new File(fichResultado));
+			
+			pb.start().waitFor();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}
