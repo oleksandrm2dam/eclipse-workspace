@@ -42,4 +42,7 @@
 <fullyQualifiedTypeName name="java.io.FileReader"/>
 <fullyQualifiedTypeName name="java.sql.Connection"/>
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="com.db4o.ObjectContainer"/>
+<fullyQualifiedTypeName name="com.db4o.Db4oEmbedded"/>
+<fullyQualifiedTypeName name="com.db4o.ObjectSet"/>
 </qualifiedTypeNameHistroy>
