@@ -2,13 +2,13 @@ package rurales;
 
 public class Room {
 	
-	private String type;
-	private boolean bathroom;
+	private String type; // Single, double, triple
+	private boolean hasBathroom;
 	private float price;
 	
-	public Room(String type, boolean bathroom, float price) {
+	public Room(String type, boolean hasBathroom, float price) {
 		this.type = type;
-		this.bathroom = bathroom;
+		this.hasBathroom = hasBathroom;
 		this.price = price;
 	}
 
@@ -20,12 +20,12 @@ public class Room {
 		this.type = type;
 	}
 
-	public boolean isBathroom() {
-		return bathroom;
+	public boolean isHasBathroom() {
+		return hasBathroom;
 	}
 
-	public void setBathroom(boolean bathroom) {
-		this.bathroom = bathroom;
+	public void setHasBathroom(boolean hasBathroom) {
+		this.hasBathroom = hasBathroom;
 	}
 
 	public float getPrice() {
@@ -38,7 +38,7 @@ public class Room {
 
 	@Override
 	public String toString() {
-		return "Room [type=" + type + ", bathroom=" + bathroom + ", price=" + price + "]";
+		return "Room [type=" + type + ", hasBathroom=" + hasBathroom + ", price=" + price + "]";
 	}
 	
 }

@@ -1,15 +1,15 @@
 package rurales;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Accommodation {
+public class Apartment {
 	
 	private String name;
 	private String address;
 	private String phoneNumber;
-	private ArrayList<Room> rooms;
+	private Room[] rooms;
 	
-	public Accommodation(String name, String address, String phoneNumber, ArrayList<Room> rooms) {
+	public Apartment(String name, String address, String phoneNumber, Room[] rooms) {
 		this.name = name;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
@@ -40,18 +40,18 @@ public class Accommodation {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public ArrayList<Room> getRooms() {
+	public Room[] getRooms() {
 		return rooms;
 	}
 
-	public void setRooms(ArrayList<Room> rooms) {
+	public void setRooms(Room[] rooms) {
 		this.rooms = rooms;
 	}
 
 	@Override
 	public String toString() {
-		return "Accommodation [name=" + name + ", address=" + address + ", phoneNumber=" + phoneNumber + ", rooms="
-				+ rooms + "]";
+		return "Apartment [name=" + name + ", address=" + address + ", phoneNumber=" + phoneNumber + ", rooms="
+				+ Arrays.toString(rooms) + "]";
 	}
 	
 }
