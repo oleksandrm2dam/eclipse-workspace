@@ -2,7 +2,11 @@ package rurales;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -16,10 +20,11 @@ public class Main {
 		try {
 			Class.forName("org.sqlite.JDBC");
 			connection = DriverManager.getConnection(
-					"jdbc:sqlite:databases/rurales/sqlite/sqlite.db",
+					"jdbc:sqlite:databases/rurales/sqlite/rurales.db",
 					"",
 					""
 					);
+			
 			scanner = new Scanner(System.in);
 			String answ;
 			do {
@@ -30,15 +35,23 @@ public class Main {
 						System.out.println("Write the price: ");
 						try {
 							float price = Float.parseFloat(scanner.nextLine());
-							Room[] rooms = roomsCheaperThan(price);
+							ArrayList<Room> rooms = roomsCheaperThan(price);
 							if(rooms != null) {
-								System.out.println(Arrays.toString(rooms));
+								System.out.println(rooms.toString());
 							}
 						} catch (NumberFormatException e) {
 							System.out.println("Incorrect number.");
 						}
 						break;
 					case "2":
+						System.out.println("Write the name of the apartment:");
+						String name = scanner.nextLine();
+						String phoneNumber = getPhoneNumber(name);
+						if(phoneNumber == null) {
+							System.out.println("Not found.");
+						} else {
+							System.out.println("Phone number: " + phoneNumber);
+						}
 						break;
 					case "3":
 						break;
@@ -61,7 +74,8 @@ public class Main {
 				}
 			} while(!answ.equals("9"));
 			
-			
+			scanner.close();
+			connection.close();
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
@@ -76,42 +90,91 @@ public class Main {
 		menu += "4) Get the number of single rooms in an apartment.\n";
 		menu += "5) Get the number of double rooms in an apartment.\n";
 		menu += "6) Get the number of triple rooms in an apartment.\n";
-		menu += "7) Get the address of an aparment.\\n";
+		menu += "7) Get the address of an aparment.\n";
 		menu += "8) Get all the apartments.\n";
 		menu += "9) EXIT.\n";
 		System.out.println(menu);
 	}
 	
-	private static Room[] roomsCheaperThan(float price) {
-		
+	private static ArrayList<Room> roomsCheaperThan(float price) {
+		ArrayList<Room> output = new ArrayList<Room>();
+		String sql = "SELECT * FROM rooms WHERE price < ?";
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setFloat(1, price);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				output.add(new Room(
+						rs.getString("type"), 
+						rs.getBoolean("hasBathroom"), 
+						rs.getFloat("price")
+						)
+				);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return output;
 	}
 	
 	private static String getPhoneNumber(String name) {
-		
+		String sql = "SELECT phoneNumber FROM apartments WHERE name = ?";
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, name);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				return rs.getString(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	private static Apartment[] hasRoomsWithToilet() {
-		
+	private static ArrayList<Apartment> hasRoomsWithToilet() {
+		ArrayList<Apartment> output = new ArrayList<Apartment>();
+		String sql = "";
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				output.add(new Apartment(
+						rs.getString(1),
+						rs.getString(2),
+						rs.getString(3)
+						)
+				);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return output;
 	}
 	
 	private static int numberOfSingleRooms(String name) {
-		
+		return 0;
 	}
 	
 	private static int numberOfDoubleRooms(String name) {
-		
+		return 0;
 	}
 
 	private static int numberOfTripleRooms(String name) {
-		
+		return 0;
 	}
 	
 	private static String addressOfAnAparment(String name) {
-		
+		return null;
 	}
 	
-	private static Apartment[] allApartments() {
+	private static ArrayList<Apartment> allApartments() {
+		ArrayList<Apartment> output = new ArrayList<Apartment>();
 		
+		return output;
 	}
 
 }

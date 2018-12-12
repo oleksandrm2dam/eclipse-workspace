@@ -40,7 +40,6 @@
 <fullyQualifiedTypeName name="com.db4o.ObjectContainer"/>
 <fullyQualifiedTypeName name="com.db4o.Db4oEmbedded"/>
 <fullyQualifiedTypeName name="com.db4o.ObjectSet"/>
-<fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="entities.Phonebook"/>
 <fullyQualifiedTypeName name="util.PhonebookUtil"/>
 <fullyQualifiedTypeName name="java.lang.Thread"/>
@@ -49,4 +48,9 @@
 <fullyQualifiedTypeName name="java.sql.Connection"/>
 <fullyQualifiedTypeName name="java.util.Scanner"/>
 <fullyQualifiedTypeName name="java.util.Arrays"/>
+<fullyQualifiedTypeName name="java.sql.Statement"/>
+<fullyQualifiedTypeName name="java.sql.ResultSet"/>
+<fullyQualifiedTypeName name="java.sql.PreparedStatement"/>
+<fullyQualifiedTypeName name="java.util.ArrayList"/>
+<fullyQualifiedTypeName name="com.db4o.internal.slots.SystemSlotChange"/>
 </qualifiedTypeNameHistroy>

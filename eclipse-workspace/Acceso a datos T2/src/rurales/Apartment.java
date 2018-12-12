@@ -15,6 +15,13 @@ public class Apartment {
 		this.phoneNumber = phoneNumber;
 		this.rooms = rooms;
 	}
+	
+	public Apartment(String name, String address, String phoneNumber) {
+		this.name = name;
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.rooms = null;
+	}
 
 	public String getName() {
 		return name;
