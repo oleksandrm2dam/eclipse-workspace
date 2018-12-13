@@ -18,15 +18,63 @@ public class Main {
 	public static void main(String[] args) {
 		
 		try {
-			Class.forName("org.sqlite.JDBC");
-			connection = DriverManager.getConnection(
-					"jdbc:sqlite:databases/rurales/sqlite/rurales.db",
-					"",
-					""
-					);
-			
 			scanner = new Scanner(System.in);
-			String answ;
+			
+			String dbOptions = "Choose a database:\n";
+			dbOptions += "1) SQLite\n";
+			dbOptions += "2) Apache Derby\n";
+			dbOptions += "3) H2\n";
+			dbOptions += "4) HSQLDB\n";
+			dbOptions += "5) DB4O\n";
+			System.out.println(dbOptions);
+			String answ = scanner.nextLine();
+			
+			switch(answ) {
+			case "1":
+				Class.forName("org.sqlite.JDBC");
+				connection = DriverManager.getConnection(
+						"jdbc:sqlite:databases/rurales/sqlite/rurales.db",
+						"",
+						""
+						);
+				break;
+			case "2":
+				Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+				connection = DriverManager.getConnection(
+						"jdbc:derby:databases/rurales/derby/rurales.db",
+						"",
+						""
+						);
+				break;
+			case "3":
+				Class.forName("org.sqlite.JDBC");
+				connection = DriverManager.getConnection(
+						"jdbc:sqlite:databases/rurales/sqlite/rurales.db",
+						"",
+						""
+						);
+				break;
+			case "4":
+				Class.forName("org.sqlite.JDBC");
+				connection = DriverManager.getConnection(
+						"jdbc:sqlite:databases/rurales/sqlite/rurales.db",
+						"",
+						""
+						);
+				break;
+			case "5":
+				Class.forName("org.sqlite.JDBC");
+				connection = DriverManager.getConnection(
+						"jdbc:sqlite:databases/rurales/sqlite/rurales.db",
+						"",
+						""
+						);
+				break;
+			default:
+				System.out.println("Not valid.");
+				return;
+			}
+			
 			do {
 				printMenu();
 				answ = scanner.nextLine();
@@ -54,16 +102,44 @@ public class Main {
 						}
 						break;
 					case "3":
+						ArrayList<Apartment> list = hasRoomsWithToilet();
+						for(Apartment ap : list) {
+							System.out.println(ap.toString());
+						}
 						break;
 					case "4":
+						System.out.println("Write the name of the apartment:");
+						String name4 = scanner.nextLine();
+						int count = numberOfRooms(name4, "single");
+						System.out.println("Number of single rooms: " + count);
 						break;
 					case "5":
+						System.out.println("Write the name of the apartment:");
+						String name5 = scanner.nextLine();
+						count = numberOfRooms(name5, "double");
+						System.out.println("Number of double rooms: " + count);
 						break;
 					case "6":
+						System.out.println("Write the name of the apartment:");
+						String name6 = scanner.nextLine();
+						count = numberOfRooms(name6, "triple");
+						System.out.println("Number of triple rooms: " + count);
 						break;
 					case "7":
+						System.out.println("Write the name of the apartment:");
+						name = scanner.nextLine();
+						String address = addressOfAnAparment(name);
+						if(address == null) {
+							System.out.println("Not found.");
+						} else {
+							System.out.println("Address: " + address);
+						}
 						break;
 					case "8":
+						list = allApartments();
+						for(Apartment ap : list) {
+							System.out.println(ap.toString());
+						}
 						break;
 					case "9":
 						System.out.println("BYE!");
@@ -135,7 +211,8 @@ public class Main {
 	
 	private static ArrayList<Apartment> hasRoomsWithToilet() {
 		ArrayList<Apartment> output = new ArrayList<Apartment>();
-		String sql = "";
+		String sql = "SELECT * FROM apartments WHERE id IN "
+				+ "(SELECT apartmentId FROM rooms WHERE hasBathroom = 1)";
 		try {
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
@@ -155,25 +232,59 @@ public class Main {
 		return output;
 	}
 	
-	private static int numberOfSingleRooms(String name) {
-		return 0;
-	}
-	
-	private static int numberOfDoubleRooms(String name) {
-		return 0;
-	}
-
-	private static int numberOfTripleRooms(String name) {
+	private static int numberOfRooms(String name, String type) {
+		String sql = "SELECT COUNT(id) FROM rooms WHERE type = ? AND apartmentId = "
+				+ "(SELECT id FROM apartments WHERE name = ?)";
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, type);
+			ps.setString(2, name);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				return(rs.getInt(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return 0;
 	}
 	
 	private static String addressOfAnAparment(String name) {
+		String sql = "SELECT address FROM apartments WHERE name = ?";
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, name);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				return(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	
 	private static ArrayList<Apartment> allApartments() {
 		ArrayList<Apartment> output = new ArrayList<Apartment>();
-		
+		String sql = "SELECT * FROM apartments";
+		try {
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				output.add(new Apartment(
+						rs.getString(1),
+						rs.getString(2),
+						rs.getString(3)
+						)
+				);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return output;
 	}
 
