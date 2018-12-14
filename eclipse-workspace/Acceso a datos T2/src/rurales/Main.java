@@ -41,12 +41,13 @@ public class Main {
 			case "2":
 				Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 				connection = DriverManager.getConnection(
-						"jdbc:derby:databases/rurales/derby/rurales.db",
+						"jdbc:derby:databases/rurales/derby/rurales",
 						"",
 						""
 						);
 				break;
 			case "3":
+				// FALTA
 				Class.forName("org.sqlite.JDBC");
 				connection = DriverManager.getConnection(
 						"jdbc:sqlite:databases/rurales/sqlite/rurales.db",
@@ -55,9 +56,9 @@ public class Main {
 						);
 				break;
 			case "4":
-				Class.forName("org.sqlite.JDBC");
+				Class.forName("org.hsqldb.jdbcDriver");
 				connection = DriverManager.getConnection(
-						"jdbc:sqlite:databases/rurales/sqlite/rurales.db",
+						"jdbc:hsqldb:file:databases/rurales/hsqldb",
 						"",
 						""
 						);
@@ -212,16 +213,16 @@ public class Main {
 	private static ArrayList<Apartment> hasRoomsWithToilet() {
 		ArrayList<Apartment> output = new ArrayList<Apartment>();
 		String sql = "SELECT * FROM apartments WHERE id IN "
-				+ "(SELECT apartmentId FROM rooms WHERE hasBathroom = 1)";
+				+ "(SELECT apartmentId FROM rooms WHERE hasBathroom = true)";
 		try {
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
 				output.add(new Apartment(
-						rs.getString(1),
 						rs.getString(2),
-						rs.getString(3)
+						rs.getString(3),
+						rs.getString(4)
 						)
 				);
 			}
@@ -275,9 +276,9 @@ public class Main {
 			
 			while(rs.next()) {
 				output.add(new Apartment(
-						rs.getString(1),
 						rs.getString(2),
-						rs.getString(3)
+						rs.getString(3),
+						rs.getString(4)
 						)
 				);
 			}
