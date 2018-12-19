@@ -47,10 +47,9 @@ public class Main {
 						);
 				break;
 			case "3":
-				// FALTA
-				Class.forName("org.sqlite.JDBC");
+				Class.forName("org.h2.Driver");
 				connection = DriverManager.getConnection(
-						"jdbc:sqlite:databases/rurales/sqlite/rurales.db",
+						"jdbc:h2:./databases/rurales/h2",
 						"",
 						""
 						);
@@ -64,12 +63,6 @@ public class Main {
 						);
 				break;
 			case "5":
-				Class.forName("org.sqlite.JDBC");
-				connection = DriverManager.getConnection(
-						"jdbc:sqlite:databases/rurales/sqlite/rurales.db",
-						"",
-						""
-						);
 				break;
 			default:
 				System.out.println("Not valid.");
