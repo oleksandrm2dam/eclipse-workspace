@@ -10,10 +10,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import com.db4o.Db4oEmbedded;
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectSet;
+
 public class Main {
 	
 	private static Connection connection;
 	private static Scanner scanner;
+	private static ObjectContainer db;
 	
 	public static void main(String[] args) {
 		
@@ -63,7 +68,10 @@ public class Main {
 						);
 				break;
 			case "5":
-				break;
+				db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), "databases/rurales/db4o/rurales.yap");
+				//createObjects(db);
+				db4oMenu();
+				return;
 			default:
 				System.out.println("Not valid.");
 				return;
@@ -280,6 +288,173 @@ public class Main {
 		}
 
 		return output;
+	}
+	
+	// DB40 methods
+	public static void createObjects(ObjectContainer db) {
+		Room r1 = new Room("single", false, 75.99f);
+		Room r2 = new Room("double", false, 25.00f);
+		Room r3 = new Room("double", false, 34.99f);
+		Room r4 = new Room("triple", false, 20.35f);
+		Room r5 = new Room("single", true, 72.25f);
+		Room r6 = new Room("triple", true, 35.50f);
+		Room r7 = new Room("single", false, 99.99f);
+		Room r8 = new Room("single", false, 66.00f);
+		Room r9 = new Room("double", false, 50.55f);
+		Room r10 = new Room("double", true, 49.95f);
+		Room r11 = new Room("double", true, 75.99f);
+		Room r12 = new Room("single", false, 55.00f);
+		Room r13 = new Room("single", false, 55.00f);
+		Room r14 = new Room("single", true, 20.99f);
+		
+		Room[] rooms1 = new Room[] {r1, r2, r3};
+		Room[] rooms2 = new Room[] {r4, r5};
+		Room[] rooms3 = new Room[] {r6, r7, r8};
+		Room[] rooms4 = new Room[] {r9, r10, r11, r12};
+		Room[] rooms5 = new Room[] {r13, r14};
+		
+		Apartment a1 = new Apartment("Apartamento1", "Calle1", "917851121", rooms1);
+		Apartment a2 = new Apartment("Apartamento2", "Calle2", "622087555", rooms2);
+		Apartment a3 = new Apartment("Apartamento3", "Calle3", "915443212", rooms3);
+		Apartment a4 = new Apartment("Apartamento4", "Calle4", "917852323", rooms4);
+		Apartment a5 = new Apartment("Apartamento5", "Calle5", "915554443", rooms5);
+		
+		db.store(a1);
+		db.store(a2);
+		db.store(a3);
+		db.store(a4);
+		db.store(a5);
+	}
+	
+	public static void db4oMenu() {
+		String answ;
+		Apartment ap;
+		ObjectSet<Object> result;
+		do {
+			printMenu();
+			answ = scanner.nextLine();
+			switch (answ) {
+			case "1":
+				// Buscar habitaciones que tengan un precio inferior al indicado por el usuario.
+				System.out.println("Write the price: ");
+				float price = Float.parseFloat(scanner.nextLine());
+				
+				ap = new Apartment(null, null, null, null);
+				result = db.queryByExample(ap);
+				while(result.hasNext()) {
+					Apartment current = (Apartment) result.next();
+					for(int i = 0; i < current.getRooms().length; ++i) {
+						if(current.getRooms()[i].getPrice() < price) {
+							System.out.println("Apartment: " + current.getName() + ". " + current.getRooms()[i].toString());
+						}
+					}
+				}
+				break;
+			case "2":
+				// Consultar el número de teléfono de un alojamiento indicado por el usuario.
+				System.out.println("Write the aparment's name: ");
+				String name = scanner.nextLine();
+				ap = new Apartment(name, null, null, null);
+				result = db.queryByExample(ap);
+				if(result.hasNext()) {
+					Apartment current = (Apartment) result.next();
+					System.out.println(current.getPhoneNumber());
+				}
+				break;
+			case "3":
+				// Buscar todos los alojamientos que tengan alguna habitación con baño.
+				ap = new Apartment(null, null, null, null);
+				result = db.queryByExample(ap);
+				while(result.hasNext()) {
+					Apartment current = (Apartment) result.next();
+					boolean hasBathroom = false;
+					for(int i = 0; i < current.getRooms().length && !hasBathroom; ++i) {
+						if(current.getRooms()[i].isHasBathroom()) {
+							System.out.println(current.toString());
+							hasBathroom = true;
+						}
+					}
+				}
+				break;
+			case "4":
+				// Consultar el número de habitaciones individuales de un determinado alojamiento.
+				System.out.println("Write the aparment's name: ");
+				name = scanner.nextLine();
+				ap = new Apartment(name, null, null, null);
+				result = db.queryByExample(ap);
+				if(result.hasNext()) {
+					numberOfRoomsDb4o("single", result);
+				} else {
+					System.out.println("Apartment not found.");
+				}
+				break;
+			case "5":
+				// Consultar el número de habitaciones dobles de un determinado alojamiento.
+				System.out.println("Write the aparment's name: ");
+				name = scanner.nextLine();
+				ap = new Apartment(name, null, null, null);
+				result = db.queryByExample(ap);
+				if(result.hasNext()) {
+					numberOfRoomsDb4o("double", result);
+				} else {
+					System.out.println("Apartment not found.");
+				}
+				break;
+			case "6":
+				// Consultar el número de habitaciones triples de un determinado alojamiento.
+				System.out.println("Write the aparment's name: ");
+				name = scanner.nextLine();
+				ap = new Apartment(name, null, null, null);
+				result = db.queryByExample(ap);
+				if(result.hasNext()) {
+					numberOfRoomsDb4o("triple", result);
+				} else {
+					System.out.println("Apartment not found.");
+				}
+				break;
+			case "7":
+				// Consultar la dirección de un determinado alojamiento.
+				System.out.println("Write the aparment's name: ");
+				name = scanner.nextLine();
+				ap = new Apartment(name, null, null, null);
+				result = db.queryByExample(ap);
+				if(result.hasNext()) {
+					Apartment current = (Apartment) result.next();
+					System.out.println(current.getAddress());
+				} else {
+					System.out.println("Apartment not found.");
+				}
+				break;
+			case "8":
+				// Mostrar todos los alojamientos de la comunidad, con su dirección y su teléfono.
+				ap = new Apartment(null, null, null, null);
+				result = db.queryByExample(ap);
+				while(result.hasNext()) {
+					Apartment current = (Apartment) result.next();
+					System.out.println(current.toString());
+				}
+				break;
+			case "9":
+				System.out.println("BYE!");
+				break;
+			default:
+				System.out.println("Option not valid.");
+				break;	
+			}
+		} while (!answ.equals("9"));
+		db.close();
+		scanner.close();
+	}
+	
+	private static void numberOfRoomsDb4o(String type, ObjectSet result) {
+		Apartment current = (Apartment) result.next();
+		int count = 0;
+		for(int i = 0; i < current.getRooms().length; ++i) {
+			if(current.getRooms()[i].getType().equals(type)) {
+				++count;
+			}
+		}
+		System.out.println("Number of " + type + " rooms: " + count);
 	}
 
 }

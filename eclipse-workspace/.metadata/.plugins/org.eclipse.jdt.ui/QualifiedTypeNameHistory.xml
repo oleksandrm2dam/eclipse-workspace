@@ -37,8 +37,6 @@
 <fullyQualifiedTypeName name="java.io.IOException"/>
 <fullyQualifiedTypeName name="java.io.File"/>
 <fullyQualifiedTypeName name="java.io.FileReader"/>
-<fullyQualifiedTypeName name="com.db4o.ObjectContainer"/>
-<fullyQualifiedTypeName name="com.db4o.Db4oEmbedded"/>
 <fullyQualifiedTypeName name="com.db4o.ObjectSet"/>
 <fullyQualifiedTypeName name="entities.Phonebook"/>
 <fullyQualifiedTypeName name="util.PhonebookUtil"/>
@@ -53,4 +51,6 @@
 <fullyQualifiedTypeName name="java.util.ArrayList"/>
 <fullyQualifiedTypeName name="com.db4o.internal.slots.SystemSlotChange"/>
 <fullyQualifiedTypeName name="java.util.Random"/>
+<fullyQualifiedTypeName name="com.db4o.ObjectContainer"/>
+<fullyQualifiedTypeName name="com.db4o.Db4oEmbedded"/>
 </qualifiedTypeNameHistroy>
