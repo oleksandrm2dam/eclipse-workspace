@@ -5,9 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import com.db4o.Db4oEmbedded;
@@ -359,6 +357,8 @@ public class Main {
 				if(result.hasNext()) {
 					Apartment current = (Apartment) result.next();
 					System.out.println(current.getPhoneNumber());
+				} else {
+					System.out.println("Apartment not found.");
 				}
 				break;
 			case "3":
@@ -446,7 +446,7 @@ public class Main {
 		scanner.close();
 	}
 	
-	private static void numberOfRoomsDb4o(String type, ObjectSet result) {
+	private static void numberOfRoomsDb4o(String type, ObjectSet<Object> result) {
 		Apartment current = (Apartment) result.next();
 		int count = 0;
 		for(int i = 0; i < current.getRooms().length; ++i) {
